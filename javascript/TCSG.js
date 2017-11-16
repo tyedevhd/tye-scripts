@@ -1,4 +1,5 @@
 (function () {
+
     /**
      * Gets the current address of the user. If the user opens the form for the first time, the address is
      * extracted form the url. If the user has already submitted the form, the address is extracted form `localStorage`.
@@ -31,7 +32,7 @@
      */
     function setAddressValues (address) {
         // console.log('setAddressValues=', JSON.stringify(address));
-        document.querySelectorAll('input.wpcf7-form-control.wpcf7-text').forEach(function(element) {
+        document.querySelectorAll('input.wpcf7-form-control').forEach(function(element) {
             var name=element.name;
             if(address[name]!=null) {
                 element.setAttribute('value', address[name]);
