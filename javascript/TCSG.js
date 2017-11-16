@@ -52,11 +52,11 @@
      */
     function saveCurrentAddress () {
         // takes the values form the current fields and saves it in localStorage
-        var address = {};
+        var address = getCurrentAddress();
         document.querySelectorAll('input.wpcf7-form-control.wpcf7-text').forEach(function(element) {
             address[element.name] = element.value||'';
         });
-        console.log('address=', JSON.stringify({}, null, 2));
+        console.log('address=', JSON.stringify(address, null, 2));
         // We save the state of the address in localStorage so we can get it later
         // We use the `location.search` as key to make sure that we only retrieve the address form localStore if the
         // page is opened with exactly the same URL as before. Else we would not show the new address if we send a
