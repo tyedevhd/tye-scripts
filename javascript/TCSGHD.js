@@ -1,5 +1,10 @@
 (function () {
 
+    // extracts the address for the URL it assumes the first field after the ? contains the ID
+    function getAddressFromUrl () {
+        return JSON.parse(atob(location.search.replace(/^[^=]*=/, '').replace(/&.*/, '')));
+    }
+
     /**
      * Gets the current address of the user. If the user opens the form for the first time, the address is
      * extracted form the url. If the user has already submitted the form, the address is extracted form `localStorage`.
@@ -21,7 +26,7 @@
             address = JSON.parse(rememgeredAddressJSON);
         } else {
             // this is the address form the url
-            address = JSON.parse(atob(location.search.replace(/[^=]*=/, '').replace(/&.*/, '')));
+            address = getAddressFromUrl();
         }
         return address;
     }
@@ -71,6 +76,18 @@
         setAddressValues(address);
     }
 
+    function getDelta(address) {
+        var delta = {};
+        var originalAddress = getAddressFromUrl();
+        for (var property in originalAddress) {
+            if (object.hasOwnProperty(property)) {
+                if(address[property]!=originalAddress[property]) {
+                    delta[property] = address[property];
+                }
+            }
+        }
+        return delta;
+    }
     /**
      * Adds a handler to the form that is executed when the user hits the "Save" button
      */
