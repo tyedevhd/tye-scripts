@@ -37,9 +37,9 @@
      */
     function setAddressValues (address) {
         // console.log('setAddressValues=', JSON.stringify(address));
-        document.querySelectorAll('input.wpcf7-form-control').forEach(function(element) {
-            var name=element.name;
-            if(address[name]!=null) {
+        document.querySelectorAll('input').forEach(function (element) {
+            var name = element.name;
+            if (address[name] != null) {
                 element.setAttribute('value', address[name]);
             }
         });
@@ -59,10 +59,13 @@
     function saveCurrentAddress () {
         // takes the values form the current fields and saves it in localStorage
         var address = getCurrentAddress();
-        document.querySelectorAll('input.wpcf7-form-control.wpcf7-text').forEach(function(element) {
-            address[element.name] = element.value||'';
+        document.querySelectorAll('input').forEach(function (element) {
+            // we update the element only it it is already in the address
+            if (address[element.name] != null) {
+                address[element.name] = element.value || '';
+            }
         });
-        console.log('address=', JSON.stringify(address, null, 2));
+        var delta=getDelta(address);
         // We save the state of the address in localStorage so we can get it later
         // We use the `location.search` as key to make sure that we only retrieve the address form localStore if the
         // page is opened with exactly the same URL as before. Else we would not show the new address if we send a
@@ -74,20 +77,31 @@
 
         // we now have to update the form, else it will loose the content.
         setAddressValues(address);
+        setValueForElement('#tye-delta',JSON.stringify(delta));
+        setValueForElement('#tye-delta-json',JSON.stringify(delta, 2, null));
     }
 
-    function getDelta(address) {
+    function setValueForElement(selector,value){
+        var element = document.querySelector(selector);
+        if(element){
+            element.setAttribute('value', value);
+        }
+
+    }
+
+    function getDelta (address) {
         var delta = {};
         var originalAddress = getAddressFromUrl();
-        for (var property in originalAddress) {
-            if (object.hasOwnProperty(property)) {
-                if(address[property]!=originalAddress[property]) {
-                    delta[property] = address[property];
+        for (var p in originalAddress) {
+            if (originalAddress.hasOwnProperty(p)) {
+                if (address[p] !== originalAddress[p]) {
+                    delta[p] = address[p];
                 }
             }
         }
         return delta;
     }
+
     /**
      * Adds a handler to the form that is executed when the user hits the "Save" button
      */
