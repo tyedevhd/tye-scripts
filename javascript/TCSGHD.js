@@ -117,7 +117,8 @@
         $("#tye-form").submit(function(e) {
             $("#tye-form-dimmer").addClass('active');
 
-            var url = "https://www.tyeapp.com/wp-json/contact-form-7/v1/contact-forms/706/feedback"; // the script where you handle the form input.
+            // var url = "http://www.scharf.gr";
+            var url = "https://www.tyeapp.com/wp-json/contact-form-7/v1/contact-forms/706/feedback";
 
             $.ajax({
                 type: "POST",
@@ -128,13 +129,26 @@
                     $("#tye-form-dimmer").removeClass('active');
 
                     console.log('result=', JSON.stringify(result, null, 2));
+                },
+                error: function(result)
+                {
+                    $("#tye-form-dimmer").removeClass('active');
+                    $('.message ')
+                        .transition('scale');
+                    console.error('error=', JSON.stringify(result, null, 2));
                 }
             });
 
             e.preventDefault(); // avoid to execute the actual submit of the form.
         });
     }
-
+    $('.message .close')
+        .on('click', function() {
+            $(this)
+                .closest('.message')
+                .transition('fade')
+            ;
+        });
     // theser functions are executed immediately when the script is loaded in the browser:
     loadAddressIntoFields();
     addOnSubmitHandlerToSaveButton();
