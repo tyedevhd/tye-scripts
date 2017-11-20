@@ -127,8 +127,8 @@
                 success: function(result)
                 {
                     $("#tye-form-dimmer").removeClass('active');
-
-                    console.log('result=', JSON.stringify(result, null, 2));
+                    $('#saved-success ')
+                        .transition('scale');
                 },
                 error: function(result)
                 {
