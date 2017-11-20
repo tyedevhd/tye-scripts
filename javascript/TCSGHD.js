@@ -113,6 +113,26 @@
         } else if (ele.attachEvent) {
             saveButton.attachEvent('onsubmit', saveCurrentAddress);            //Old IE
         }
+        // this is the id of the form
+        $("#tye-form").submit(function(e) {
+            $("#tye-form-dimmer").addClass('active');
+
+            var url = "https://www.tyeapp.com/wp-json/contact-form-7/v1/contact-forms/706/feedback"; // the script where you handle the form input.
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: $("#tye-form").serialize(), // serializes the form's elements.
+                success: function(result)
+                {
+                    $("#tye-form-dimmer").removeClass('active');
+
+                    console.log('result=', JSON.stringify(result, null, 2));
+                }
+            });
+
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+        });
     }
 
     // theser functions are executed immediately when the script is loaded in the browser:
