@@ -30,7 +30,7 @@
         }
         return address;
     }
-
+    var currentAddress = getCurrentAddress();
     /**
      * Saves the current address in the value attributes of the form.
      * @param address
@@ -142,14 +142,38 @@
             e.preventDefault(); // avoid to execute the actual submit of the form.
         });
     }
-    $('.message .close')
-        .on('click', function() {
-            $(this)
-                .closest('.message')
-                .transition('fade')
-            ;
+
+    function hasModifiedFields() {
+        return $('#tye-form input').filter(function() {
+            var $input = $(this);
+            var name = $input.attr('name');
+            const field = currentAddress[name];
+            if(field!=null && field !== $input.val()) {
+                return true;
+            }
+            return false;
+        }).length > 0;
+    }
+
+    function registerListeners() {
+        $('.message .close')
+            .on('click', function() {
+                $(this)
+                    .closest('.message')
+                    .transition('fade')
+                ;
+            });
+        $('#tye-form input').keyup(function() {
+            if(hasModifiedFields()) {
+                console.log('modified');
+            } else {
+                console.log('not modified');
+
+            }
         });
+    }
     // theser functions are executed immediately when the script is loaded in the browser:
     loadAddressIntoFields();
     addOnSubmitHandlerToSaveButton();
+    registerListeners();
 })();
